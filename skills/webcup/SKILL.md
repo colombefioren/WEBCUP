@@ -7,9 +7,24 @@ description: Playbook for the "24H by Webcup" hackathon (24-hour web application
 
 You are the engineering copilot of a team competing in **24H by Webcup**. Your job: maximize the score on the jury's grid by shipping a **deployed, coherent, secure, working web application**, not a pile of half-features.
 
+## 0. First, identify the current phase
+
+Before doing anything, decide which phase the team is in. Only act on the part of this playbook that matches that phase.
+
+| Phase | Signals | Where to act |
+|---|---|---|
+| **Prep (J-7 → J0)** | No subject yet; user talks about setup, server, stack, "before the event" | Section 4 "Prep" + `references/architecture-baseline.md` |
+| **Contest (H0 → H+20)** | Subject or feature list shared; `FEATURES.md` exists; user mentions a feature, a drop, or an hour of the contest | Sections 4 "Launch" and "Build loop", 5, 6, 7, 8 |
+| **Freeze (H+20 → H+24)** | User mentions the end, deliverables, video, jury accounts, or "last hours" | Section 4 "Freeze" + `references/delivery-checklist.md` + `references/security-checklist.md` |
+
+Rules:
+- If the signals are unclear, ask the user one short question ("Are we in prep, in the contest, or in the final hours?") and continue.
+- **Once the subject is revealed, never go back to prep work.** Do not build the full prep checklist during the contest. If the foundation is missing, run only the "Fast setup" in section 4 Launch, then move to features.
+- During the contest, write subject-specific code. "Keep it generic" applies to prep only.
+
 Read `references/` files when the matching phase starts:
 - `references/security-checklist.md` — before writing any auth, endpoint, form, or data query, and before the final freeze.
-- `references/architecture-baseline.md` — during J-7 prep and at H0 scaffolding.
+- `references/architecture-baseline.md` — during prep only. During the contest, use it only as a pattern lookup (its "Patterns to reach for" table).
 - `references/delivery-checklist.md` — from H+20 onward, and whenever the user asks about deliverables.
 
 ## 1. How the contest actually works (facts that drive every decision)
@@ -47,7 +62,7 @@ Rule of thumb: **one fully working, integrated feature beats three partial ones.
 
 ## 4. Phase playbook
 
-### J-7 → J0: preparation (subject unknown)
+### Prep: J-7 → J0 (subject unknown) — skip this entire block once the subject is revealed
 Build a reusable, subject-agnostic foundation. See `references/architecture-baseline.md`. Target state before H0:
 - Framework + DB + ORM/migrations running on the provided server, HTTPS on, one-command deploy.
 - Auth ready: register/login/logout, password hashing (argon2id or bcrypt ≥ 12), secure session cookies, roles (`user`, `admin` minimum), login rate limiting.
@@ -57,19 +72,28 @@ Build a reusable, subject-agnostic foundation. See `references/architecture-base
 - AI proxy route ready (server-side OpenRouter call with timeout, fallback model, cache, graceful error) — delete it if unused.
 - Smoke test: deploy "hello authenticated world" end to end on the real server.
 
-### H0 → H2: launch
+### Launch: H0 → H2
+0. Check what the prep phase produced (deployed app, auth, DB, middleware, UI shell). Reuse everything that works. If something is missing, run **Fast setup** below instead of the full prep checklist.
 1. Read the subject fully. Extract: entities, roles, base features, implicit security needs.
 2. Write `FEATURES.md` with base features + acceptance criteria.
 3. Design the data model (entities, relations, ownership field on every user-owned row, indexes on foreign keys and lookup fields).
 4. Sketch the API surface (resource routes, who can call each, input schema, output shape).
 5. Scaffold, migrate, seed, **deploy**. Only then start features.
 
-### H2 → H20: build loop
+**Fast setup (only if prep was skipped or incomplete, target ≤ 90 min, in this order):**
+1. Framework + DB + migrations running and deployed on the real server with HTTPS.
+2. Auth with hashed passwords, secure session cookie, and a `role` field.
+3. One auth guard + one role guard + schema validation + central error handler.
+4. Login rate limiting and security headers (library defaults are enough).
+5. Layout + navigation + form components with error states.
+Skip everything else from the prep checklist; add it later only if a feature needs it.
+
+### Build loop: H2 → H20
 For each base feature, then each announced drop, run the triage in section 5, then build with the Definition of Done. After each done feature: commit, deploy, verify on the live URL, update `FEATURES.md`.
 
 When a drop is announced mid-feature: finish or stash the current slice first, then triage. Security-category drops are high-value (explicitly on the grid and often cheap on a good baseline) — favor them.
 
-### H20 → H24: freeze and deliver
+### Freeze: H+20 → H+24
 - **H+20**: feature freeze. Only fixes, polish, security pass, and deliverables from here.
 - Run `references/security-checklist.md` end to end against the live URL.
 - Walk every flow as each jury role on the live URL. Fix dead ends, empty states, error messages.
