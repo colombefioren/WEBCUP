@@ -48,6 +48,17 @@ Read `references/` files when needed:
 
 Rule of thumb: **one fully working, integrated feature beats three partial ones.** "Pertinence, finition, bon fonctionnement" matter more than count.
 
+### Winning strategy (apply every time a choice is made)
+
+1. **Base features first, 100%.** They define whether the app "exists coherently". Never trade an unfinished base feature for an additional one.
+2. **One product story.** Every feature must serve the same user and the same core flow. When a drop does not fit, integrate it into the story or skip it with a written reason.
+3. **Make invisible quality visible.** The jury receives a URL, accounts, a recap, and a video — not the code. Security, architecture, caching, and validation only score if the jury can see them: clean validation messages, a clear 403 page, a friendly 429 message, a "Technical & security highlights" block in the recap, and a short security segment in the video.
+4. **One signature feature.** Pick one feature (ideally tied to the theme, data, or AI) and polish it beyond the others: it targets the special distinctions ("fonctionnalité particulièrement réussie") and anchors the video.
+5. **Use data for real.** "Bonne exploitation des données ou des API" is on the grid: prefer features that compute something from the app's own data (stats, recommendations, dashboards, search) or a relevant external API, over static pages.
+6. **Self-explanatory app.** Nobody will pitch it: the jury must understand it alone. Clear landing, first-run guidance, realistic seeded data, obvious navigation, no dead ends.
+7. **Security drops are cheap points.** On a secure-by-default codebase they take minutes and a cybersecurity juror may be grading them. Take them early.
+8. **Stability over ambition at the end.** A stable app with fewer features beats a broken app with more.
+
 ## 3. Non-negotiable operating rules
 
 1. **The deployed URL must work at every moment.** Deploy in the first 2 hours, then deploy after every merged feature. Never leave production broken for more than a few minutes.
@@ -80,6 +91,19 @@ Skip anything else; add it later only if a feature needs it.
 For each base feature, then each announced drop, run the triage in section 5, then build with the Definition of Done. After each done feature: commit, deploy, verify on the live URL, update `FEATURES.md`.
 
 When a drop is announced mid-feature: finish or stash the current slice first, then triage. Security-category drops are high-value (explicitly on the grid and often cheap on a good baseline) — favor them.
+
+**Checkpoints** (compare progress to these; if behind, cut scope, not quality):
+
+| Hour | Expected state |
+|---|---|
+| H+2 | Data model, auth, and skeleton deployed on the live URL |
+| H+8 | All base features done (Definition of Done) and deployed |
+| H+12 | Signature feature chosen and in progress; first additional drops done; security checklist sections 1–3 pass |
+| H+16 | Seed data and jury accounts realistic; UX pass on main flows (empty, error, loading states; mobile) |
+| H+20 | Feature freeze. Only fixes, polish, security pass, deliverables |
+| H+23 | Final deploy verified; recap and video done; no more deploys unless fixing a blocker |
+
+When the team works in parallel, split by module (one entity/feature per person) to avoid conflicts, and merge small and often.
 
 ### Freeze: H+20 → H+24
 - **H+20**: feature freeze. Only fixes, polish, security pass, and deliverables from here.
