@@ -2,8 +2,8 @@
 
 Agent skill + team notes for the **24H by Webcup** hackathon (24-hour web application sprint).
 
-- `skills/webcup/` — the skill (English). Tells the coding agent how to maximize the jury score: feature triage, secure-by-default architecture, Definition of Done, security checklist, delivery checklist.
-- `ESSENTIALS.en.md` / `ESSENTIALS.fr.md` — what the team must know: dates, deliverables, evaluation grid, do's and don'ts, what to check before the event.
+- `skills/webcup/` — the skill (English), used **during the contest** (H0 → H+24). Tells the coding agent how to maximize the jury score: feature triage, secure-by-default architecture, Definition of Done, security checklist, delivery checklist.
+- `ESSENTIALS.en.md` / `ESSENTIALS.fr.md` — what the team must know: dates, deliverables, evaluation grid, do's and don'ts, the J-7 preparation checklist, and what to check before the event.
 - `AGENTS.md` — entry point for agents that read `AGENTS.md`.
 
 ## Install
