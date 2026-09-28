@@ -1,17 +1,15 @@
 # Agent instructions — 24H by Webcup
 
-This repository is a playbook for AI coding agents working on a **24H by Webcup** hackathon project.
+This repository is a playbook for AI coding agents working on a **24H by Webcup** hackathon project, **during the contest** (from the subject reveal at H0 to the H+24 deadline).
 
 When you work on a Webcup project, load and follow:
 
-1. `skills/webcup/SKILL.md` — main playbook: contest rules that matter, jury grid, phase plan, feature triage, Definition of Done, development standards, security baseline.
-2. `skills/webcup/references/architecture-baseline.md` — during preparation (J-7 → J0) only. Once the subject is revealed, use the "Fast setup" in `SKILL.md` instead.
-
-First identify the current phase (prep, contest, or freeze) as described in `SKILL.md` section 0, and act only on that phase.
+1. `skills/webcup/SKILL.md` — main playbook: contest rules that matter, jury grid, launch plan, feature triage, Definition of Done, development standards, security baseline.
+2. `skills/webcup/references/architecture-patterns.md` — code structure and patterns to reach for while building features.
 3. `skills/webcup/references/security-checklist.md` — before writing auth, endpoints, forms, or queries, and before the final freeze.
 4. `skills/webcup/references/delivery-checklist.md` — from H+20, or when asked about deliverables.
 
-Human-oriented summaries of the rules: `ESSENTIALS.en.md`, `ESSENTIALS.fr.md`.
+Pre-event preparation (J-7) is not agent work in this playbook. It is covered for the team in `ESSENTIALS.en.md` / `ESSENTIALS.fr.md`.
 
 Core rules, always:
 - Keep the deployed URL working at every moment; deploy early and after each finished feature.
