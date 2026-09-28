@@ -1,0 +1,17 @@
+{
+  "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
+  "name": "webcup",
+  "description": "24H by Webcup hackathon playbook.",
+  "owner": {
+    "name": "Colombe Fioren",
+    "url": "https://github.com/colombefioren"
+  },
+  "version": "1.0.0",
+  "plugins": [
+    {
+      "name": "webcup",
+      "description": "Development and cybersecurity playbook for the 24H by Webcup hackathon.",
+      "source": "./"
+    }
+  ]
+}

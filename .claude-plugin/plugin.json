@@ -1,0 +1,14 @@
+{
+  "name": "webcup",
+  "description": "Development and cybersecurity playbook for the 24H by Webcup hackathon: feature triage, secure-by-default architecture, delivery checklist.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Colombe Fioren",
+    "url": "https://github.com/colombefioren"
+  },
+  "homepage": "https://github.com/colombefioren/WEBCUP",
+  "repository": "https://github.com/colombefioren/WEBCUP",
+  "license": "MIT",
+  "skills": "./skills/",
+  "keywords": ["webcup", "hackathon", "web-app", "security", "agent-skills"]
+}
