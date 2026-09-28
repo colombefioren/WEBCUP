@@ -7,7 +7,7 @@ When you work on a Webcup project, load and follow:
 1. `skills/webcup/SKILL.md` — main playbook: contest rules that matter, jury grid, launch plan, feature triage, Definition of Done, development standards, security baseline.
 2. `skills/webcup/references/architecture-patterns.md` — code structure and patterns to reach for while building features.
 3. `skills/webcup/references/security-checklist.md` — before writing auth, endpoints, forms, or queries, and before the final freeze.
-4. `skills/webcup/references/delivery-checklist.md` — from H+20, or when asked about deliverables.
+4. `skills/webcup/references/delivery-checklist.md` — when the team wraps up for delivery, or when asked about deliverables.
 
 Pre-event preparation (J-7) is not agent work in this playbook. It is covered for the team in `ESSENTIALS.en.md` / `ESSENTIALS.fr.md`.
 

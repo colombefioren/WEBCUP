@@ -1,4 +1,4 @@
-# Webcup Delivery Checklist (H+20 → H+24)
+# Webcup Delivery Checklist (wrap-up before the deadline)
 
 Only what is delivered and online at closing is evaluated. The jury tests later, alone, with what you give them. Make that experience flawless.
 
@@ -60,7 +60,7 @@ Record on the **deployed** app, not localhost. Readable resolution, no personal 
 - [ ] No placeholder text (lorem ipsum), no dead links, no "coming soon" buttons.
 - [ ] Security smoke script from `security-checklist.md` passes on the live domain.
 - [ ] Seed/demo data looks realistic and consistent with the theme.
-- [ ] Last deploy done, verified, and **no more deploys** in the final hour unless fixing a blocker.
+- [ ] Last deploy done, verified, and **no more deploys** close to the deadline unless fixing a blocker.
 
 ## Keep it alive during evaluation (J+1 → J+X)
 
