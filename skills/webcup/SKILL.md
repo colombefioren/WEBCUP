@@ -129,12 +129,16 @@ Recommend **now** when value is high and the cost is small compared to the time 
 - [ ] Server-side: input validated by schema, authorization checked (role + ownership), explicit output shape, errors mapped to clean HTTP codes and messages.
 - [ ] UI: loading, empty, error, and success states; form field errors; responsive at 390px and desktop; no console errors.
 - [ ] Lists paginated; queries indexed; no N+1 on list pages.
+- [ ] Concerns separated across files; no touched file near 1000 lines (split early, aim ~300 max).
 - [ ] No secrets or stack traces exposed; no sensitive fields in responses.
 - [ ] `FEATURES.md` updated; committed; deployed.
 
 ## 7. Development standards
 
 - **Structure**: routes/controllers → services (business logic) → data access. No business logic in UI components or route handlers. One module per domain entity.
+- **Separation of concerns**: one file = one responsibility (a route group, a service, a repository, a schema, a component, a hook, a util). Never mix data access, business rules, validation, and rendering in the same file.
+- **File size**: no file may reach 1000 lines. Aim far below: split a file as soon as it holds more than one responsibility or grows past ~300 lines (extract sub-components, hooks, services, helpers, constants, types). Before adding code to a big file, extract first, then add.
+- **No god files**: no catch-all `utils.ts`, `helpers.js`, `api.ts`, or single `page` component holding a whole feature. Name files after what they do.
 - **API**: resource-oriented routes, consistent JSON error contract `{ error: { code, message, fields? } }`, correct status codes (400 validation, 401 unauthenticated, 403 forbidden, 404 not found / not owned, 409 conflict, 429 rate limited, 500 generic without details).
 - **Data**: migrations, foreign keys, unique constraints, timestamps, ownership column (`ownerId`/`userId`) on user data; transactions for multi-step writes; idempotency for payment-like or duplicate-prone writes.
 - **Performance/scalability (cheap wins the jury can see)**: pagination with limits, DB indexes, cache-aside with TTL + invalidation on write for hot reads, compression, image optimization, lazy loading, stateless app server so it could scale horizontally.

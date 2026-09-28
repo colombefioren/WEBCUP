@@ -18,6 +18,24 @@ FEATURES.md                # live feature status = final recap deliverable
 
 One module per domain entity from the subject. Business logic in services, not in route handlers or UI components.
 
+Separation of concerns inside a module, one responsibility per file:
+
+```
+modules/booking/
+  booking.routes.ts        # HTTP wiring only: path, guards, validation, call service
+  booking.service.ts       # business rules
+  booking.repository.ts    # data access only
+  booking.schema.ts        # input validation schemas
+  booking.dto.ts           # response shapes
+ui/pages/bookings/
+  BookingsPage.tsx         # composition only
+  BookingList.tsx
+  BookingForm.tsx
+  useBookings.ts           # data fetching/state
+```
+
+Hard limit: no file reaches 1000 lines. Split as soon as a file holds a second responsibility or passes ~300 lines.
+
 ## Shared helpers worth having (create on first need, reuse after)
 
 - `assertOwner(resource, user)` — ownership check reused by every module.
