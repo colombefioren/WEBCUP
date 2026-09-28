@@ -61,3 +61,15 @@ Record on the **deployed** app, not localhost. Readable resolution, no personal 
 - [ ] Security smoke script from `security-checklist.md` passes on the live domain.
 - [ ] Seed/demo data looks realistic and consistent with the theme.
 - [ ] Last deploy done, verified, and **no more deploys** in the final hour unless fixing a blocker.
+
+## Keep it alive during evaluation (J+1 → J+X)
+
+The jury tests days after the deadline. The app must still work, unchanged.
+
+- [ ] Hosting does not sleep, expire, or hit a free-tier limit during the evaluation days.
+- [ ] No deploys or code changes after H+24 — work after the deadline is not considered and can look like cheating.
+- [ ] Jury sessions last long enough, or re-login is easy; jury passwords do not expire.
+- [ ] Jury actions cannot destroy the demo: one juror deleting or editing data must not break another juror's test (separate accounts per juror if possible, or protected demo records).
+- [ ] DB backup taken at H+24; a restore procedure exists in case the demo data gets corrupted.
+- [ ] External API keys and AI quotas stay valid through the evaluation period; the app degrades gracefully if a quota runs out (clear message, core flows still work).
+- [ ] TLS certificate and domain stay valid.
