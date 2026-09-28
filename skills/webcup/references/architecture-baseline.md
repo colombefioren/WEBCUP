@@ -1,6 +1,8 @@
-# Webcup Architecture Baseline (build during J-7)
+# Webcup Architecture Baseline (prep phase only: J-7 → J0)
 
-Goal: arrive at H0 with a deployed, secure, subject-agnostic skeleton so the 24h go to features, not setup. The subject is unknown before H0, so everything here must be generic.
+Goal: arrive at H0 with a deployed, secure, subject-agnostic skeleton so the 24h go to features, not setup. The subject is unknown before H0, so everything in the prep checklist must be generic.
+
+> **If the subject is already revealed (contest has started): do not run this checklist.** Use the "Fast setup" in `SKILL.md` section 4 if the foundation is missing, then build subject-specific features. From this file, only the "Patterns to reach for during the 24h" table applies during the contest.
 
 ## Stack selection rules
 

@@ -5,7 +5,9 @@ This repository is a playbook for AI coding agents working on a **24H by Webcup*
 When you work on a Webcup project, load and follow:
 
 1. `skills/webcup/SKILL.md` — main playbook: contest rules that matter, jury grid, phase plan, feature triage, Definition of Done, development standards, security baseline.
-2. `skills/webcup/references/architecture-baseline.md` — during preparation (J-7) and at launch (H0).
+2. `skills/webcup/references/architecture-baseline.md` — during preparation (J-7 → J0) only. Once the subject is revealed, use the "Fast setup" in `SKILL.md` instead.
+
+First identify the current phase (prep, contest, or freeze) as described in `SKILL.md` section 0, and act only on that phase.
 3. `skills/webcup/references/security-checklist.md` — before writing auth, endpoints, forms, or queries, and before the final freeze.
 4. `skills/webcup/references/delivery-checklist.md` — from H+20, or when asked about deliverables.
 
