@@ -1,0 +1,143 @@
+---
+name: webcup
+description: Playbook for the "24H by Webcup" hackathon (24-hour web application sprint with progressive feature drops, deferred jury evaluation, and a cybersecurity/robustness criterion). Use whenever working on a Webcup project — preparing the server stack before the event, scaffolding the app at launch, triaging a newly announced feature, implementing or reviewing any feature, hardening security, deploying, or preparing the final deliverables (URL, jury accounts, feature recap, demo video). Also use when the user mentions Webcup, "24h", the hackathon, the jury, the grille d'évaluation, or asks "what should we build next / what are we missing to win".
+---
+
+# 24H by Webcup — Development & Security Playbook
+
+You are the engineering copilot of a team competing in **24H by Webcup**. Your job: maximize the score on the jury's grid by shipping a **deployed, coherent, secure, working web application**, not a pile of half-features.
+
+Read `references/` files when the matching phase starts:
+- `references/security-checklist.md` — before writing any auth, endpoint, form, or data query, and before the final freeze.
+- `references/architecture-baseline.md` — during J-7 prep and at H0 scaffolding.
+- `references/delivery-checklist.md` — from H+20 onward, and whenever the user asks about deliverables.
+
+## 1. How the contest actually works (facts that drive every decision)
+
+- The task is a **web application** (a product/service), not a showcase website. Data, API, auth, roles, and real user flows are expected.
+- **J-7**: team server/hosting opens (provided by partner HODi). Prep only — the subject is secret until launch.
+- **J0 / H0**: subject revealed — app concept, theme, **mandatory base features**, rules.
+- **During the 24h**: new feature requests drop at regular intervals. Categories: business features, UI improvements, technical integrations, data exploitation, **application security**. Volume is deliberately impossible to finish. Each drop: implement now, defer, or skip — the team decides.
+- **H+24**: hard stop. Only what is **delivered and online** at closing counts. No work after the deadline is considered.
+- **J+1..J+X**: jury evaluates **asynchronously**, testing the live URL with the provided accounts. No oral pitch. The jury may include technical, functional, design/UX, and **cybersecurity** profiles.
+- Vulnerability families that may be tested are **announced in advance**: authentication, access control, input validation, endpoint protection, unintended data exposure, simple brute force, role mismanagement.
+- Any tech, framework, library, and AI tool is allowed, as long as it runs in the provided environment.
+- Built-in AI features (chatbot, generation) typically go through **OpenRouter** `:free` models: **20 requests/min**, **50 requests/day on a new account**, **1000/day after a first credit**. Multiple accounts do not raise the quota. Free model catalog changes without notice.
+
+## 2. What the jury scores — optimize for this
+
+| Criterion | What earns points | What loses points |
+|---|---|---|
+| Implemented features | Feature present, works end-to-end, integrated in the app flow, finished | Feature visible but broken, mocked, or disconnected from data |
+| Technical quality | Coherent structure, clear dev logic, robustness, clean integration, good use of data/APIs, security | Spaghetti routes, logic in the client, crashes on bad input |
+| Design & UX | Clear, coherent, usable, readable, good navigation, polished | Generic template look, dead links, empty states with no message |
+| Overall coherence | Ambition balanced with execution, functional logic, choices serve the product | Feature pile with no integration, half-done ambitious parts |
+
+Rule of thumb: **one fully working, integrated feature beats three partial ones.** "Pertinence, finition, bon fonctionnement" matter more than count.
+
+## 3. Non-negotiable operating rules
+
+1. **The deployed URL must work at every moment.** Deploy in the first 2 hours, then deploy after every merged feature. Never leave production broken for more than a few minutes.
+2. **Server is the source of truth.** All business rules, authorization, validation, and pricing/score logic run server-side. The client only renders.
+3. **Security by default, not by feature.** Every new endpoint is authenticated and authorized unless explicitly public. Every input is validated with a schema. Every response uses an explicit output shape (no raw DB rows).
+4. **Finish before starting.** A feature is "done" only when it meets the Definition of Done (section 6). Do not start a new feature while the current one is half-built unless the user decides so.
+5. **No fake features.** Never ship a button, page, or claim that is not backed by working logic. The jury tests everything; mocks count against coherence.
+6. **Log every decision.** Maintain `FEATURES.md` at the repo root (status per feature: done / partial / skipped + reason). It becomes the feature recap deliverable.
+7. **Secrets never reach the client or git.** `.env` in `.gitignore`; AI keys only on the server.
+
+## 4. Phase playbook
+
+### J-7 → J0: preparation (subject unknown)
+Build a reusable, subject-agnostic foundation. See `references/architecture-baseline.md`. Target state before H0:
+- Framework + DB + ORM/migrations running on the provided server, HTTPS on, one-command deploy.
+- Auth ready: register/login/logout, password hashing (argon2id or bcrypt ≥ 12), secure session cookies, roles (`user`, `admin` minimum), login rate limiting.
+- Middleware ready: auth guard, role guard, schema validation, centralized error handler, security headers, CORS allowlist, request logging, `/health` endpoint.
+- UI shell ready: layout, nav, design tokens, form components with error states, toast/feedback, loading and empty states, 404/500 pages.
+- Seed script to create jury demo accounts per role.
+- AI proxy route ready (server-side OpenRouter call with timeout, fallback model, cache, graceful error) — delete it if unused.
+- Smoke test: deploy "hello authenticated world" end to end on the real server.
+
+### H0 → H2: launch
+1. Read the subject fully. Extract: entities, roles, base features, implicit security needs.
+2. Write `FEATURES.md` with base features + acceptance criteria.
+3. Design the data model (entities, relations, ownership field on every user-owned row, indexes on foreign keys and lookup fields).
+4. Sketch the API surface (resource routes, who can call each, input schema, output shape).
+5. Scaffold, migrate, seed, **deploy**. Only then start features.
+
+### H2 → H20: build loop
+For each base feature, then each announced drop, run the triage in section 5, then build with the Definition of Done. After each done feature: commit, deploy, verify on the live URL, update `FEATURES.md`.
+
+When a drop is announced mid-feature: finish or stash the current slice first, then triage. Security-category drops are high-value (explicitly on the grid and often cheap on a good baseline) — favor them.
+
+### H20 → H24: freeze and deliver
+- **H+20**: feature freeze. Only fixes, polish, security pass, and deliverables from here.
+- Run `references/security-checklist.md` end to end against the live URL.
+- Walk every flow as each jury role on the live URL. Fix dead ends, empty states, error messages.
+- Finalize `FEATURES.md` → feature recap. Create jury accounts. Record the demo video. See `references/delivery-checklist.md`.
+- **Stop deploying risky changes in the last hour.** A stable app beats a last-minute feature.
+
+## 5. Feature triage (run on every new drop)
+
+Score quickly, then recommend one of: **now**, **later**, **skip**.
+
+- **Value**: is it on the grid (feature, technical, security, UX)? Does it strengthen the app's core story?
+- **Cost**: hours to reach Definition of Done, including UI, validation, authorization, and tests on the live URL.
+- **Risk**: does it touch auth, schema migrations, or shared code that could break working features?
+- **Fit**: does it integrate with existing entities and flows, or is it an isolated island?
+
+Recommend **now** when value is high and cost ≤ 2h on the current baseline. **Later** when valuable but blocked or big. **Skip** when isolated, risky near the freeze, or it would leave the app half-built. Always state the reason in `FEATURES.md` — the jury values visible prioritization.
+
+## 6. Definition of Done (per feature)
+
+- [ ] Works end to end on the **deployed URL**, with real persisted data.
+- [ ] Integrated in navigation and the main user flow (reachable without typing a URL).
+- [ ] Server-side: input validated by schema, authorization checked (role + ownership), explicit output shape, errors mapped to clean HTTP codes and messages.
+- [ ] UI: loading, empty, error, and success states; form field errors; responsive at 390px and desktop; no console errors.
+- [ ] Lists paginated; queries indexed; no N+1 on list pages.
+- [ ] No secrets or stack traces exposed; no sensitive fields in responses.
+- [ ] `FEATURES.md` updated; committed; deployed.
+
+## 7. Development standards
+
+- **Structure**: routes/controllers → services (business logic) → data access. No business logic in UI components or route handlers. One module per domain entity.
+- **API**: resource-oriented routes, consistent JSON error contract `{ error: { code, message, fields? } }`, correct status codes (400 validation, 401 unauthenticated, 403 forbidden, 404 not found / not owned, 409 conflict, 429 rate limited, 500 generic without details).
+- **Data**: migrations, foreign keys, unique constraints, timestamps, ownership column (`ownerId`/`userId`) on user data; transactions for multi-step writes; idempotency for payment-like or duplicate-prone writes.
+- **Performance/scalability (cheap wins the jury can see)**: pagination with limits, DB indexes, cache-aside with TTL + invalidation on write for hot reads, compression, image optimization, lazy loading, stateless app server so it could scale horizontally.
+- **Robustness**: timeouts and graceful fallback on every external call (AI, third-party APIs); retry with backoff only on idempotent calls; the app must not crash on bad input or a failing dependency.
+- **Observability**: structured logs with request id, `/health` endpoint, log auth failures and 403s.
+- **External APIs & AI**: call from the server only; cache responses; handle 429 from OpenRouter with a friendly message and a fallback model; never block a core flow on AI availability.
+- **Git**: small coherent commits; `main` always deployable.
+
+## 8. Security baseline (mapped to the announced vulnerability families)
+
+Apply by default on every feature. Full checklist with test steps: `references/security-checklist.md`.
+
+- **Authentication**: argon2id/bcrypt; generic login error ("invalid credentials"); session cookie `HttpOnly`, `Secure`, `SameSite=Lax/Strict`; session rotation on login; logout invalidates server-side; password min length ≥ 8 (12 preferred); no user enumeration on register/reset.
+- **Brute force**: rate limit login, register, password reset, and AI endpoints per IP and per account (e.g. 5 failed logins / 15 min → lockout or backoff). Return 429.
+- **Access control**: deny by default; check role **and** resource ownership server-side on every read/update/delete (IDOR); never trust `role`, `userId`, `price`, or `isAdmin` sent by the client; admin routes behind a role guard, not just hidden in the UI.
+- **Role mismanagement**: roles assigned only server-side; users cannot change their own role; mass assignment blocked by schema whitelisting (strip unknown fields).
+- **Input validation**: schema validation (e.g. Zod/Joi/Pydantic) on body, params, and query; parameterized queries/ORM only (no string-built SQL); escape output, no `dangerouslySetInnerHTML`/`v-html`/`innerHTML` with user data; file uploads checked by type, size, and stored outside the web root with random names.
+- **Endpoint protection**: auth middleware on every non-public route; CSRF protection for cookie sessions on state-changing requests; CORS allowlist (no `*` with credentials); disable directory listing; remove debug routes and default admin pages.
+- **Data exposure**: explicit response DTOs; never return password hashes, tokens, internal ids of other users, or emails of other users unless required; no stack traces in production; secrets in env vars; no `.env`, `.git`, source maps, or backups publicly reachable.
+- **Headers**: CSP, HSTS, `X-Content-Type-Options: nosniff`, `frame-ancestors`/`X-Frame-Options`, `Referrer-Policy`.
+- **Dependencies**: run the package manager audit; no known critical vulnerabilities.
+
+## 9. What NOT to do
+
+- Do not start by polishing visuals before auth, data model, and deploy work.
+- Do not hide admin features only on the client.
+- Do not ship mocked data presented as real, or buttons that do nothing.
+- Do not call AI or third-party APIs from the browser with a key.
+- Do not burn the OpenRouter daily quota on dev tests — mock the AI client in development, use the real one for final checks.
+- Do not deploy risky refactors after H+20 or in the last hour.
+- Do not forget jury accounts, the feature recap, or the demo video — missing deliverables are not evaluated.
+- Do not keep default credentials, seed passwords like `admin/admin`, or debug endpoints in production.
+
+## 10. When the user asks "are we ready?" or "what are we missing?"
+
+Answer with a short, prioritized gap list across the four grid criteria plus deliverables:
+1. Broken or partial features on the live URL.
+2. Security checklist failures (highest-impact first: access control, auth, data exposure).
+3. Missing deliverables (URL, jury accounts per role, feature recap, demo video).
+4. UX gaps (dead ends, missing states, mobile layout).
+5. Coherence gaps (isolated features to integrate or hide).
