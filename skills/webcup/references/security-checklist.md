@@ -68,7 +68,6 @@ Run this before the feature freeze and again on the **live URL** before delivery
 
 ## 9. AI features (if any)
 
-- [ ] AI calls go through a server route; the key never reaches the browser.
 - [ ] AI route authenticated and rate limited (OpenRouter free tier: 20 req/min, 50/day new account, 1000/day after credit).
 - [ ] Prompt injection limited: system prompt server-side, user input clearly delimited, model output treated as untrusted (escaped on render, never executed, never used to authorize actions).
 - [ ] Timeout + fallback model + friendly error; the core app works when AI is down.

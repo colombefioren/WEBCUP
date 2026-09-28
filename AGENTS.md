@@ -15,5 +15,5 @@ Core rules, always:
 - Keep the deployed URL working at every moment; deploy early and after each finished feature.
 - All authorization, validation, and business logic run server-side. Deny by default.
 - Finish a feature to the Definition of Done before starting the next.
-- Never expose secrets, stack traces, or other users' data. AI keys stay on the server.
+- Never expose secrets, stack traces, or other users' data.
 - Keep `FEATURES.md` updated: it becomes the feature recap deliverable.

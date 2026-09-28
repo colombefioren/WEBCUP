@@ -43,7 +43,7 @@ Hard limit: no file reaches 1000 lines. Split as soon as a file holds a second r
 - Central error handler with the JSON error contract `{ error: { code, message, fields? } }`.
 - Pagination helper (cursor or offset with a max limit).
 - Cache helper: `getOrSet(key, ttl, fn)` and `invalidate(prefix)`.
-- AI client (`lib/ai`): server-side OpenRouter call, timeout, fallback model list, response cache, 429 handling, dev mock.
+- AI client (`lib/ai`): OpenRouter call, timeout, fallback model list, response cache, 429 handling.
 
 ## Patterns to reach for
 

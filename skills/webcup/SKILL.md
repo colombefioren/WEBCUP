@@ -67,7 +67,7 @@ Rule of thumb: **one fully working, integrated feature beats three partial ones.
 4. **Finish before starting.** A feature is "done" only when it meets the Definition of Done (section 6). Do not start a new feature while the current one is half-built unless the user decides so.
 5. **No fake features.** Never ship a button, page, or claim that is not backed by working logic. The jury tests everything; mocks count against coherence.
 6. **Log every decision.** Maintain `FEATURES.md` at the repo root (status per feature: done / partial / skipped + reason). It becomes the feature recap deliverable.
-7. **Secrets never reach the client or git.** `.env` in `.gitignore`; AI keys only on the server.
+7. **Secrets never reach the client or git.** `.env` in `.gitignore`.
 
 ## 4. Contest playbook
 
@@ -144,7 +144,7 @@ Recommend **now** when value is high and the cost is small compared to the time 
 - **Performance/scalability (cheap wins the jury can see)**: pagination with limits, DB indexes, cache-aside with TTL + invalidation on write for hot reads, compression, image optimization, lazy loading, stateless app server so it could scale horizontally.
 - **Robustness**: timeouts and graceful fallback on every external call (AI, third-party APIs); retry with backoff only on idempotent calls; the app must not crash on bad input or a failing dependency.
 - **Observability**: structured logs with request id, `/health` endpoint, log auth failures and 403s.
-- **External APIs & AI**: call from the server only; cache responses; handle 429 from OpenRouter with a friendly message and a fallback model; never block a core flow on AI availability.
+- **External APIs & AI**: cache responses; handle 429 from OpenRouter with a friendly message and a fallback model; never block a core flow on AI availability.
 - **Git**: small coherent commits; `main` always deployable.
 
 ## 8. Security baseline (mapped to the announced vulnerability families)
