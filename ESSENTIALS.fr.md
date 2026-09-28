@@ -99,6 +99,51 @@ Certaines fonctionnalités annoncées pendant les 24h peuvent elles-mêmes être
 - Déployer des changements risqués dans la dernière heure.
 - Oublier un livrable : comptes jury, récap, vidéo.
 
+## Préparation J-7 (serveurs ouverts, sujet encore secret)
+
+Objectif : arriver à H0 avec un squelette déployé, sécurisé et indépendant du sujet, pour que les 24 heures servent aux fonctionnalités et pas à l'installation. Le sujet est inconnu : tout ce qui est construit ici doit rester générique. Le skill de l'agent de code démarre à H0 : il réutilisera ce que vous préparez ici.
+
+### Choisir la stack
+
+- Choisir ce que l'équipe maîtrise déjà. La vitesse de l'équipe compte plus que la « meilleure » stack théorique.
+- Elle doit tourner sur le serveur fourni (HODi). Vérifier dès J-7 : versions runtime, BDD disponible, reverse proxy, HTTPS, ports, limites disque/RAM.
+- Préférer un framework full-stack avec rendu serveur ou une couche API claire (ex. Next.js/Nuxt/SvelteKit + ORM, Laravel, Django, Rails, NestJS + SPA). Moins de pièces = moins de pannes à 4 h du matin.
+- BDD relationnelle (PostgreSQL ou MySQL) par défaut : relations, contraintes et transactions aident la cohérence comme la sécurité.
+
+### À construire avant H0
+
+**Déploiement**
+- [ ] Dépôt, `.gitignore` avec `.env`.
+- [ ] Déploiement en une commande sur le serveur fourni (script ou CI). Testé deux fois.
+- [ ] HTTPS, domaine, redirection HTTP→HTTPS.
+- [ ] Variables d'environnement de production sur le serveur ; mode debug désactivé.
+- [ ] Gestionnaire de processus / redémarrage automatique en cas de crash.
+
+**Back-end**
+- [ ] Connexion BDD, migrations, script de seed (comptes jury par rôle + données de démo).
+- [ ] Auth : inscription, connexion, déconnexion, profil ; argon2id ou bcrypt (coût ≥ 12) ; session par cookie sécurisé ; rotation de session.
+- [ ] Rôles : `user`, `admin` (+ place pour un troisième rôle) ; middleware de contrôle de rôle.
+- [ ] Helper de vérification de propriété réutilisé par chaque module.
+- [ ] Middleware de validation par schéma.
+- [ ] Gestionnaire d'erreurs central + format d'erreur JSON `{ error: { code, message, fields? } }`.
+- [ ] Rate limiting (connexion, inscription, reset, IA, API générale).
+- [ ] En-têtes de sécurité, liste blanche CORS, protection CSRF.
+- [ ] Logs structurés avec identifiant de requête ; `/health` renvoie l'état de la BDD.
+- [ ] Helpers de pagination et de cache (mémoire ou Redis).
+- [ ] Route proxy IA : appel OpenRouter côté serveur, timeout, modèle de secours, cache, gestion du 429, mock en dev. À supprimer si inutile.
+
+**Front-end**
+- [ ] Layout, navigation, pages d'auth, routes protégées.
+- [ ] Design tokens (couleurs, échelle typographique, espacements).
+- [ ] Composants : bouton, champ avec erreur, select, liste/tableau paginé, carte, modale, toast, skeleton, état vide, error boundary.
+- [ ] Pages 404 et 500.
+- [ ] Vérification responsive à 390px.
+
+**Qualité**
+- [ ] Lint + typecheck + tests minimaux en une commande.
+- [ ] Audit des dépendances propre.
+- [ ] Test de fumée : « hello authenticated world » déployé de bout en bout sur le vrai serveur.
+
 ## À vérifier / préparer avant l'événement
 
 - [ ] Page officielle : règlement, dates, infos de l'organisateur local, contraintes techniques éventuelles.

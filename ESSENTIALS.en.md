@@ -99,6 +99,51 @@ Some features announced during the 24h may themselves be security features.
 - Don't deploy risky changes in the last hour.
 - Don't forget any deliverable: jury accounts, recap, video.
 
+## J-7 preparation (servers open, subject still secret)
+
+Goal: arrive at H0 with a deployed, secure, subject-agnostic skeleton so the 24 hours go to features, not setup. The subject is unknown, so everything built here must be generic. The coding-agent skill starts at H0: it will reuse whatever you prepare here.
+
+### Choosing the stack
+
+- Pick what the team already masters. Team speed beats the theoretical best stack.
+- It must run on the provided server (HODi). Check runtime versions, DB availability, reverse proxy, HTTPS, ports, and disk/RAM limits on day J-7.
+- Prefer one full-stack framework with server-side rendering or a clear API layer (e.g. Next.js/Nuxt/SvelteKit + ORM, Laravel, Django, Rails, NestJS + SPA). Fewer moving parts = fewer failures at 4 a.m.
+- Relational DB (PostgreSQL or MySQL) by default: relations, constraints, and transactions help both coherence and security.
+
+### Build before H0
+
+**Deploy**
+- [ ] Repo, `.gitignore` with `.env`.
+- [ ] One-command deploy to the provided server (script or CI). Tested twice.
+- [ ] HTTPS, domain, HTTP→HTTPS redirect.
+- [ ] Production env vars set on the server; debug off.
+- [ ] Process manager / container restart on crash.
+
+**Back-end**
+- [ ] DB connection, migrations, seed script (jury accounts per role + demo data).
+- [ ] Auth: register, login, logout, me; argon2id or bcrypt (cost ≥ 12); secure cookie session; session rotation.
+- [ ] Roles: `user`, `admin` (+ room for a third role); role guard middleware.
+- [ ] Ownership helper reused by every module.
+- [ ] Schema validation middleware.
+- [ ] Central error handler + JSON error contract `{ error: { code, message, fields? } }`.
+- [ ] Rate limiter (login, register, reset, AI, generic API).
+- [ ] Security headers, CORS allowlist, CSRF protection.
+- [ ] Structured logger with request id; `/health` returns DB status.
+- [ ] Pagination helper and cache helper (in-memory or Redis).
+- [ ] AI proxy route: server-side OpenRouter call, timeout, fallback model, cache, 429 handling, dev mock. Delete it if unused.
+
+**Front-end**
+- [ ] Layout, navigation, auth pages, protected routes.
+- [ ] Design tokens (colors, type scale, spacing).
+- [ ] Components: button, input with error, select, list/table with pagination, card, modal, toast, skeleton loader, empty state, error boundary.
+- [ ] 404 and 500 pages.
+- [ ] Responsive check at 390px.
+
+**Quality**
+- [ ] Lint + typecheck + minimal tests in one command.
+- [ ] Dependency audit clean.
+- [ ] Smoke test: "hello authenticated world" deployed end to end on the real server.
+
 ## To check / prepare before the event
 
 - [ ] Official page: rules, dates, local organizer info, any technical constraints.
