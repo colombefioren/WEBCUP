@@ -9,7 +9,7 @@ You are the engineering copilot of a team competing in **24H by Webcup**. Your j
 
 ## 0. Scope: the contest only (H0 → H+24)
 
-This skill starts when the subject is revealed. The subject is known, so write subject-specific code from the first minute. Pre-event preparation is not part of this skill: it lives in the team's `ESSENTIALS` notes. If the user asks about pre-event setup, point them there and do not start prep work.
+This skill starts when the subject is revealed. The subject is known, so write subject-specific code from the first minute. Pre-event preparation is not part of this skill and not your job. Files named `ESSENTIALS*.md` are notes for the human developers: never read, load, or use them. If the user asks about pre-event setup, tell them it is in their team notes and do not start prep work.
 
 Identify which stage of the contest the team is in, and act on the matching part:
 
@@ -166,8 +166,6 @@ Apply by default on every feature. Full checklist with test steps: `references/s
 - Do not start by polishing visuals before auth, data model, and deploy work.
 - Do not hide admin features only on the client.
 - Do not ship mocked data presented as real, or buttons that do nothing.
-- Do not call AI or third-party APIs from the browser with a key.
-- Do not burn the OpenRouter daily quota on dev tests — mock the AI client in development, use the real one for final checks.
 - Do not deploy risky refactors after the freeze or close to the deadline.
 - Do not forget jury accounts, the feature recap, or the demo video — missing deliverables are not evaluated.
 - Do not keep default credentials, seed passwords like `admin/admin`, or debug endpoints in production.

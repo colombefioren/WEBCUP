@@ -9,7 +9,7 @@ When you work on a Webcup project, load and follow:
 3. `skills/webcup/references/security-checklist.md` — before writing auth, endpoints, forms, or queries, and before the final freeze.
 4. `skills/webcup/references/delivery-checklist.md` — when the team wraps up for delivery, or when asked about deliverables.
 
-Pre-event preparation (J-7) is not agent work in this playbook. It is covered for the team in `ESSENTIALS.en.md` / `ESSENTIALS.fr.md`.
+Pre-event preparation is not agent work. `ESSENTIALS.en.md` and `ESSENTIALS.fr.md` are for the human developers only: never read, load, or use them.
 
 Core rules, always:
 - Keep the deployed URL working at every moment; deploy early and after each finished feature.
