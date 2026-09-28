@@ -1,6 +1,6 @@
 # Webcup Security Checklist
 
-Run this before the H+20 freeze and again on the **live URL** before delivery. Each item has a quick manual test. Fix in order: access control, authentication, data exposure, then the rest.
+Run this before the feature freeze and again on the **live URL** before delivery. Each item has a quick manual test. Fix in order: access control, authentication, data exposure, then the rest.
 
 ## 1. Access control (IDOR, roles)
 

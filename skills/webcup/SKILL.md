@@ -15,15 +15,15 @@ Identify which stage of the contest the team is in, and act on the matching part
 
 | Stage | Signals | Where to act |
 |---|---|---|
-| **Build (H0 → H+20)** | Subject or feature list shared; a feature or a new drop is discussed; `FEATURES.md` exists | Section 4 "Launch" and "Build loop", sections 5–8 |
-| **Freeze (H+20 → H+24)** | User mentions the end, deliverables, video, jury accounts, or "last hours" | Section 4 "Freeze" + `references/delivery-checklist.md` + `references/security-checklist.md` |
+| **Build** | Subject or feature list shared; a feature or a new drop is discussed; `FEATURES.md` exists | Section 4 "Launch" and "Build loop", sections 5–8 |
+| **Freeze** | The team says it stops adding features, or mentions wrapping up, deliverables, video, or jury accounts | Section 4 "Freeze" + `references/delivery-checklist.md` + `references/security-checklist.md` |
 
-If the stage is unclear, ask one short question ("How many hours are left?") and continue.
+The team decides when to move from Build to Freeze. Never impose a time budget on a task or a stage: work at the pace the work allows, and move to the next step as soon as the current one meets its Definition of Done. If the stage is unclear, ask one short question ("Still adding features, or wrapping up?") and continue.
 
 Read `references/` files when needed:
 - `references/security-checklist.md` — before writing any auth, endpoint, form, or data query, and before the final freeze.
 - `references/architecture-patterns.md` — code structure and patterns to reach for (caching, pagination, idempotency, external APIs, and more).
-- `references/delivery-checklist.md` — from H+20 onward, and whenever the user asks about deliverables.
+- `references/delivery-checklist.md` — when the team wraps up for delivery, and whenever the user asks about deliverables.
 
 ## 1. How the contest actually works (facts that drive every decision)
 
@@ -61,7 +61,7 @@ Rule of thumb: **one fully working, integrated feature beats three partial ones.
 
 ## 3. Non-negotiable operating rules
 
-1. **The deployed URL must work at every moment.** Deploy in the first 2 hours, then deploy after every merged feature. Never leave production broken for more than a few minutes.
+1. **The deployed URL must work at every moment.** Deploy the skeleton before building features, then deploy after every merged feature. Never leave production broken for more than a few minutes.
 2. **Server is the source of truth.** All business rules, authorization, validation, and pricing/score logic run server-side. The client only renders.
 3. **Security by default, not by feature.** Every new endpoint is authenticated and authorized unless explicitly public. Every input is validated with a schema. Every response uses an explicit output shape (no raw DB rows).
 4. **Finish before starting.** A feature is "done" only when it meets the Definition of Done (section 6). Do not start a new feature while the current one is half-built unless the user decides so.
@@ -71,7 +71,7 @@ Rule of thumb: **one fully working, integrated feature beats three partial ones.
 
 ## 4. Contest playbook
 
-### Launch: H0 → H2
+### Launch
 0. Inspect the repository and server: what already exists (deployed app, auth, DB, middleware, UI shell)? Reuse everything that works. If the foundation is missing or broken, run **Fast setup** below — do not build a full generic foundation.
 1. Read the subject fully. Extract: entities, roles, base features, implicit security needs.
 2. Write `FEATURES.md` with base features + acceptance criteria.
@@ -79,7 +79,7 @@ Rule of thumb: **one fully working, integrated feature beats three partial ones.
 4. Sketch the API surface (resource routes, who can call each, input schema, output shape).
 5. Scaffold, migrate, seed, **deploy**. Only then start features.
 
-**Fast setup (only if no working foundation exists, target ≤ 90 min, in this order):**
+**Fast setup (only if no working foundation exists, in this order, keep it minimal):**
 1. Framework + DB + migrations running and deployed on the real server with HTTPS.
 2. Auth with hashed passwords, secure session cookie, and a `role` field.
 3. One auth guard + one role guard + schema validation + central error handler.
@@ -87,41 +87,40 @@ Rule of thumb: **one fully working, integrated feature beats three partial ones.
 5. Layout + navigation + form components with error states.
 Skip anything else; add it later only if a feature needs it.
 
-### Build loop: H2 → H20
-For each base feature, then each announced drop, run the triage in section 5, then build with the Definition of Done. After each done feature: commit, deploy, verify on the live URL, update `FEATURES.md`.
+### Build loop
+For each base feature, then each announced drop, run the triage in section 5, then build with the Definition of Done. After each done feature: commit, deploy, verify on the live URL, update `FEATURES.md`, and move straight to the next one.
 
 When a drop is announced mid-feature: finish or stash the current slice first, then triage. Security-category drops are high-value (explicitly on the grid and often cheap on a good baseline) — favor them.
 
-**Checkpoints** (compare progress to these; if behind, cut scope, not quality):
+**Priority order** (a sequence, not a schedule — go as fast as the work allows):
+1. Data model, auth, and skeleton deployed on the live URL.
+2. All base features done and deployed.
+3. Additional drops by triage, including security drops; choose and polish the signature feature.
+4. Realistic seed data and jury accounts; UX pass on main flows (empty, error, loading states; mobile).
+5. Freeze: fixes, polish, security pass, deliverables.
 
-| Hour | Expected state |
-|---|---|
-| H+2 | Data model, auth, and skeleton deployed on the live URL |
-| H+8 | All base features done (Definition of Done) and deployed |
-| H+12 | Signature feature chosen and in progress; first additional drops done; security checklist sections 1–3 pass |
-| H+16 | Seed data and jury accounts realistic; UX pass on main flows (empty, error, loading states; mobile) |
-| H+20 | Feature freeze. Only fixes, polish, security pass, deliverables |
-| H+23 | Final deploy verified; recap and video done; no more deploys unless fixing a blocker |
+Never skip ahead to a later item while an earlier one is broken. If the deadline gets close and items remain, cut scope, not quality.
 
 When the team works in parallel, split by module (one entity/feature per person) to avoid conflicts, and merge small and often.
 
-### Freeze: H+20 → H+24
-- **H+20**: feature freeze. Only fixes, polish, security pass, and deliverables from here.
+### Freeze (wrap-up before the deadline)
+- The team chooses when to freeze. Leave enough time before the deadline to verify, write the recap, and record the video.
+- From the freeze: no new features. Only fixes, polish, security pass, and deliverables.
 - Run `references/security-checklist.md` end to end against the live URL.
 - Walk every flow as each jury role on the live URL. Fix dead ends, empty states, error messages.
 - Finalize `FEATURES.md` → feature recap. Create jury accounts. Record the demo video. See `references/delivery-checklist.md`.
-- **Stop deploying risky changes in the last hour.** A stable app beats a last-minute feature.
+- **Stop deploying risky changes close to the deadline.** A stable app beats a last-minute feature.
 
 ## 5. Feature triage (run on every new drop)
 
 Score quickly, then recommend one of: **now**, **later**, **skip**.
 
 - **Value**: is it on the grid (feature, technical, security, UX)? Does it strengthen the app's core story?
-- **Cost**: hours to reach Definition of Done, including UI, validation, authorization, and tests on the live URL.
+- **Cost**: effort to reach Definition of Done, including UI, validation, authorization, and tests on the live URL, compared to the time left before the deadline.
 - **Risk**: does it touch auth, schema migrations, or shared code that could break working features?
 - **Fit**: does it integrate with existing entities and flows, or is it an isolated island?
 
-Recommend **now** when value is high and cost ≤ 2h on the current baseline. **Later** when valuable but blocked or big. **Skip** when isolated, risky near the freeze, or it would leave the app half-built. Always state the reason in `FEATURES.md` — the jury values visible prioritization.
+Recommend **now** when value is high and the cost is small compared to the time left. **Later** when valuable but blocked or big. **Skip** when isolated, risky near the freeze, or it would leave the app half-built. Always state the reason in `FEATURES.md` — the jury values visible prioritization.
 
 ## 6. Definition of Done (per feature)
 
@@ -165,7 +164,7 @@ Apply by default on every feature. Full checklist with test steps: `references/s
 - Do not ship mocked data presented as real, or buttons that do nothing.
 - Do not call AI or third-party APIs from the browser with a key.
 - Do not burn the OpenRouter daily quota on dev tests — mock the AI client in development, use the real one for final checks.
-- Do not deploy risky refactors after H+20 or in the last hour.
+- Do not deploy risky refactors after the freeze or close to the deadline.
 - Do not forget jury accounts, the feature recap, or the demo video — missing deliverables are not evaluated.
 - Do not keep default credentials, seed passwords like `admin/admin`, or debug endpoints in production.
 
