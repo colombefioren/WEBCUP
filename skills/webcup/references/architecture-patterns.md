@@ -8,7 +8,7 @@ Use this file as a lookup while building features. Adapt everything to the revea
 src/
   modules/<entity>/        # routes/controller, service, repository, schema, dto
   middleware/              # auth, role, validate, rateLimit, errorHandler, requestId
-  lib/                     # db, cache, logger, ai (OpenRouter proxy), mailer
+  lib/                     # db, cache, logger, ai (AI provider client), mailer
   ui/components/           # design-system components with loading/empty/error states
   ui/pages/
 prisma|migrations/
@@ -43,7 +43,7 @@ Hard limit: no file reaches 1000 lines. Split as soon as a file holds a second r
 - Central error handler with the JSON error contract `{ error: { code, message, fields? } }`.
 - Pagination helper (cursor or offset with a max limit).
 - Cache helper: `getOrSet(key, ttl, fn)` and `invalidate(prefix)`.
-- AI client (`lib/ai`): OpenRouter call, timeout, fallback model list, response cache, 429 handling.
+- AI client (`lib/ai`): provider call, timeout, fallback model list, response cache, 429 handling.
 
 ## Patterns to reach for
 

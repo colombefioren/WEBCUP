@@ -35,7 +35,6 @@ Read `references/` files when needed:
 - **J+1..J+X**: jury evaluates **asynchronously**, testing the live URL with the provided accounts. No oral pitch. The jury may include technical, functional, design/UX, and **cybersecurity** profiles.
 - Vulnerability families that may be tested are **announced in advance**: authentication, access control, input validation, endpoint protection, unintended data exposure, simple brute force, role mismanagement.
 - Any tech, framework, library, and AI tool is allowed, as long as it runs in the provided environment.
-- Built-in AI features (chatbot, generation) typically go through **OpenRouter** `:free` models: **20 requests/min**, **50 requests/day on a new account**, **1000/day after a first credit**. Multiple accounts do not raise the quota. Free model catalog changes without notice.
 
 ## 2. What the jury scores — optimize for this
 
@@ -144,7 +143,7 @@ Recommend **now** when value is high and the cost is small compared to the time 
 - **Performance/scalability (cheap wins the jury can see)**: pagination with limits, DB indexes, cache-aside with TTL + invalidation on write for hot reads, compression, image optimization, lazy loading, stateless app server so it could scale horizontally.
 - **Robustness**: timeouts and graceful fallback on every external call (AI, third-party APIs); retry with backoff only on idempotent calls; the app must not crash on bad input or a failing dependency.
 - **Observability**: structured logs with request id, `/health` endpoint, log auth failures and 403s.
-- **External APIs & AI**: cache responses; handle 429 from OpenRouter with a friendly message and a fallback model; never block a core flow on AI availability.
+- **External APIs & AI**: cache responses; handle 429 from the AI provider with a friendly message and a fallback model; never block a core flow on AI availability.
 - **Git**: small coherent commits; `main` always deployable.
 
 ## 8. Security baseline (mapped to the announced vulnerability families)
