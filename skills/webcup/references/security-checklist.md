@@ -50,7 +50,7 @@ Run this before the feature freeze and again on the **live URL** before delivery
 - [ ] Responses use explicit DTOs. **Test**: inspect network responses for `password`, `hash`, `token`, `resetToken`, other users' emails or private fields.
 - [ ] Production errors return a generic message; no stack traces, SQL errors, or file paths. **Test**: send malformed JSON and invalid ids.
 - [ ] Not publicly reachable: `/.env`, `/.git/`, `/backup.sql`, `/*.map`, `/phpinfo.php`, `/node_modules/`. **Test**: request each on the live domain, expect 404.
-- [ ] Secrets only in environment variables; `.env` in `.gitignore`; no keys in client bundles. **Test**: search built JS for `sk-`, `OPENROUTER`, `API_KEY`.
+- [ ] Secrets only in environment variables; `.env` in `.gitignore`; no keys in client bundles. **Test**: search built JS for `sk-`, `API_KEY`, `SECRET`.
 - [ ] Logs do not contain passwords or tokens.
 
 ## 7. Transport & headers
@@ -68,7 +68,7 @@ Run this before the feature freeze and again on the **live URL** before delivery
 
 ## 9. AI features (if any)
 
-- [ ] AI route authenticated and rate limited (OpenRouter free tier: 20 req/min, 50/day new account, 1000/day after credit).
+- [ ] AI route authenticated and rate limited.
 - [ ] Prompt injection limited: system prompt server-side, user input clearly delimited, model output treated as untrusted (escaped on render, never executed, never used to authorize actions).
 - [ ] Timeout + fallback model + friendly error; the core app works when AI is down.
 
