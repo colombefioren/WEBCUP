@@ -4,6 +4,7 @@ Agent skill + team notes for the **24H by Webcup** hackathon (24-hour web applic
 
 - `skills/webcup/` — the skill (English), used **during the contest** (H0 → H+24). Tells the coding agent how to maximize the jury score: feature triage, secure-by-default architecture, Definition of Done, security checklist, delivery checklist.
 - `ESSENTIALS.en.md` / `ESSENTIALS.fr.md` — **for the human developers only**, not for coding agents: dates, deliverables, evaluation grid, do's and don'ts, the J-7 preparation checklist, and what to check before the event. None of the install methods below copy them into your project.
+- `WEBCUP.md` — for the team: the Next.js skeleton to build during J-7, HODi deployment checks, likely feature drops, and a copy-paste LLM prompt for H0.
 - `AGENTS.md` — entry point for agents that read `AGENTS.md`.
 
 ## Install
